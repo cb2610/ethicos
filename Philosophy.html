@@ -1,0 +1,746 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ethicos AI · The ideas behind the work</title>
+<meta name="description" content="The intellectual foundations of Ethicos AI. The interpretation problem, the law of interpretative exposure, value-based AI, the Three Rs, and practical wisdom (phronēsis) in institutions." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Cardo:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<style>
+  :root {
+    --maxw: 1240px;
+    --gutter: clamp(20px, 4vw, 56px);
+    --read: 64ch;
+
+    --bg:    #F1EBE0;
+    --bg-2:  #E8E0D1;
+    --paper: #EBE3D4;
+    --fg:    #1A1714;
+    --fg-soft: #3A332B;
+    --muted: #6C6155;
+    --rule:  #C9BFAD;
+    --rule-soft: #D8CFBD;
+    --accent: #8B5E3B;
+    --accent-2: #6E1F1A;
+
+    --sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+    --mono: "Geist Mono", ui-monospace, monospace;
+    --display: "Spectral", Georgia, serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg); color: var(--fg);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+  }
+  a { color: inherit; text-decoration: none; }
+  ::selection { background: var(--accent); color: var(--bg); }
+  .container { width: 100%; max-width: var(--maxw); margin: 0 auto; padding-left: var(--gutter); padding-right: var(--gutter); }
+  .mono { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+  h1, h2, h3, h4 { margin: 0; font-weight: 400; }
+
+  /* Top bar */
+  .topbar {
+    border-bottom: 1px solid var(--rule);
+    background: color-mix(in oklab, var(--bg) 86%, transparent);
+    backdrop-filter: saturate(140%) blur(10px);
+    position: sticky; top: 0; z-index: 30;
+  }
+  .topbar-inner { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; gap: 24px; }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand-mark {
+    width: 28px; height: 28px;
+    display: grid; place-items: center;
+    border: 1px solid var(--fg); color: var(--fg);
+    font-family: var(--display); font-style: italic; font-size: 17px; line-height: 1; border-radius: 2px;
+  }
+  .brand-name { font-family: var(--display); font-size: 20px; letter-spacing: -0.01em; white-space: nowrap; }
+  .brand-name em { font-style: italic; color: var(--accent); }
+  .top-jump { display: flex; gap: 22px; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); flex-wrap: wrap; justify-content: flex-end; }
+  .top-jump a:hover { color: var(--accent); }
+
+  /* Cover */
+  .cover {
+    padding: clamp(64px, 9vw, 112px) 0 clamp(40px, 6vw, 72px);
+    border-bottom: 1px solid var(--rule);
+    position: relative; overflow: hidden;
+  }
+  .cover::after {
+    content: ""; position: absolute; right: -4vw; bottom: -8vw;
+    width: clamp(360px, 50vw, 700px); aspect-ratio: 1 / 1;
+    background-image: radial-gradient(circle at center, transparent 0, transparent 22%, color-mix(in oklab, var(--accent) 14%, transparent) 22.3%, transparent 22.6%, transparent 30%, color-mix(in oklab, var(--accent) 10%, transparent) 30.3%, transparent 30.6%, transparent 40%, color-mix(in oklab, var(--accent) 8%, transparent) 40.3%, transparent 40.6%, transparent 52%, color-mix(in oklab, var(--accent) 6%, transparent) 52.3%, transparent 52.6%);
+    opacity: 0.45; pointer-events: none;
+  }
+  .cover .container { position: relative; z-index: 1; }
+  .cover .eyebrow { display: flex; gap: 12px; align-items: center; margin-bottom: 28px; color: var(--muted); }
+  .cover .eyebrow .dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; }
+  .cover h1 {
+    font-family: var(--display);
+    font-size: clamp(48px, 7vw, 104px);
+    line-height: 1.02; letter-spacing: -0.014em;
+    max-width: 18ch; margin-bottom: 28px;
+  }
+  .cover h1 em { font-style: italic; color: var(--accent); }
+  .cover .lead {
+    font-size: clamp(19px, 1.6vw, 23px);
+    line-height: 1.45;
+    color: var(--fg-soft);
+    max-width: 52ch;
+    margin: 0;
+    font-family: var(--display);
+    font-style: italic;
+    font-weight: 400;
+  }
+  .cover-meta {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 32px;
+    margin-top: 56px; padding-top: 32px;
+    border-top: 1px solid var(--rule);
+  }
+  .cover-meta dt { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .cover-meta dd { margin: 0; font-size: 0.95rem; color: var(--fg-soft); }
+  @media (max-width: 720px) { .cover-meta { grid-template-columns: 1fr; gap: 20px; } }
+
+  /* Intro */
+  .intro {
+    padding: clamp(56px, 7vw, 96px) 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .intro-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: 80px;
+    align-items: start;
+  }
+  .intro p {
+    font-family: var(--display);
+    font-size: clamp(22px, 1.9vw, 30px);
+    line-height: 1.35;
+    color: var(--fg);
+    margin: 0 0 18px;
+    max-width: 32ch;
+  }
+  .intro p em { font-style: italic; color: var(--accent); }
+  .intro-side {
+    border-left: 1px solid var(--rule);
+    padding-left: 28px;
+    padding-top: 4px;
+    color: var(--fg-soft);
+  }
+  .intro-side p { margin: 0 0 14px; font-size: 1rem; }
+  .intro-side ol {
+    list-style: none; padding: 0; margin: 24px 0 0;
+    display: grid; gap: 6px;
+    font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .intro-side ol li a { color: var(--fg-soft); border-bottom: 1px solid var(--rule-soft); padding-bottom: 1px; transition: color .2s ease, border-color .2s ease; }
+  .intro-side ol li a:hover { color: var(--accent); border-color: var(--accent); }
+  .intro-side ol li .num { color: var(--accent); margin-right: 12px; }
+  @media (max-width: 880px) {
+    .intro-grid { grid-template-columns: 1fr; gap: 32px; }
+    .intro-side { border-left: 0; padding-left: 0; border-top: 1px solid var(--rule); padding-top: 24px; }
+  }
+
+  /* Idea sections (long form) */
+  section.idea { padding: clamp(72px, 9vw, 132px) 0; border-bottom: 1px solid var(--rule); position: relative; }
+  .idea-head {
+    display: grid; grid-template-columns: 220px minmax(0, 1fr);
+    gap: 48px; margin-bottom: 40px; align-items: start;
+  }
+  .idea-num {
+    font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--muted); padding-top: 8px; border-top: 1px solid var(--fg); display: inline-block;
+  }
+  .idea-meta {
+    font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted); margin-top: 10px;
+  }
+  .idea-head h2 {
+    font-family: var(--display);
+    font-size: clamp(40px, 5.4vw, 76px);
+    line-height: 1.02; letter-spacing: -0.012em;
+    margin: 0; max-width: 18ch;
+  }
+  .idea-head h2 em { font-style: italic; color: var(--accent); }
+  @media (max-width: 760px) { .idea-head { grid-template-columns: 1fr; gap: 14px; } }
+
+  .idea-body {
+    display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: 64px; align-items: start;
+  }
+  .idea-prose { max-width: var(--read); }
+  .idea-prose p {
+    font-family: var(--display);
+    font-size: clamp(18px, 1.35vw, 21px);
+    line-height: 1.5;
+    color: var(--fg-soft);
+    margin: 0 0 18px;
+  }
+  .idea-prose p:first-child::first-letter {
+    font-family: var(--display);
+    font-style: italic;
+    font-size: 4.2em;
+    line-height: 0.85;
+    float: left;
+    color: var(--accent);
+    padding: 0.05em 0.12em 0 0;
+  }
+  .idea-prose p em { font-style: italic; color: var(--accent); }
+  .idea-prose .small { font-family: var(--sans); font-size: 0.92rem; color: var(--muted); font-style: normal; max-width: 56ch; }
+
+  .pull {
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 28px 0;
+    margin: 32px 0;
+  }
+  .pull p {
+    font-family: var(--display);
+    font-style: italic;
+    font-size: clamp(24px, 2.4vw, 36px);
+    line-height: 1.18;
+    color: var(--fg);
+    margin: 0;
+    max-width: 30ch;
+  }
+  .pull p em { font-style: italic; color: var(--accent); }
+  .pull .attr {
+    margin-top: 12px;
+    font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* Margin column (right of long-form prose) */
+  .idea-margin {
+    border-left: 1px solid var(--rule);
+    padding-left: 28px;
+    padding-top: 6px;
+  }
+  .idea-margin h4 {
+    font-family: var(--sans); font-weight: 500; font-size: 0.95rem;
+    margin: 0 0 8px;
+  }
+  .idea-margin p {
+    font-size: 0.92rem; color: var(--fg-soft); margin: 0 0 14px;
+  }
+  .idea-margin .label { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; display: block; }
+  .idea-margin .commercial {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    padding: 18px 20px;
+    margin-top: 20px;
+  }
+  .idea-margin .commercial p:last-child { margin-bottom: 0; }
+  @media (max-width: 980px) {
+    .idea-body { grid-template-columns: 1fr; gap: 32px; }
+    .idea-margin { border-left: 0; padding-left: 0; border-top: 1px solid var(--rule); padding-top: 24px; }
+  }
+
+  /* Three Rs block */
+  .three-rs {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0; border-top: 1px solid var(--rule); margin-top: 24px;
+  }
+  .rs {
+    border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+    padding: 24px 24px 28px;
+  }
+  .rs:last-child { border-right: 0; }
+  .rs .letter {
+    font-family: var(--display); font-style: italic; font-size: 4rem;
+    line-height: 0.9; color: var(--accent); margin-bottom: 10px;
+  }
+  .rs .name {
+    font-family: var(--display); font-size: 1.7rem; line-height: 1.1; margin-bottom: 8px;
+  }
+  .rs .q { color: var(--muted); font-size: 0.9rem; margin-bottom: 12px; font-style: italic; font-family: var(--display); }
+  .rs .desc { color: var(--fg-soft); font-size: 0.95rem; line-height: 1.5; }
+  @media (max-width: 880px) {
+    .three-rs { grid-template-columns: 1fr; }
+    .rs { border-right: 0; }
+  }
+
+  /* CTA */
+  .cta-sec { padding: clamp(72px, 10vw, 132px) 0; background: var(--bg-2); border-bottom: 1px solid var(--rule); }
+  .cta-sec h2 { font-family: var(--display); font-size: clamp(38px, 5vw, 64px); line-height: 1.05; letter-spacing: -0.012em; max-width: 22ch; margin: 0 0 24px; }
+  .cta-sec h2 em { font-style: italic; color: var(--accent); }
+  .cta-sec p { font-size: clamp(17px, 1.4vw, 20px); color: var(--fg-soft); max-width: 56ch; margin: 0 0 32px; }
+  .cta-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 14px 22px; border-radius: 2px;
+    font-size: 0.95rem; font-weight: 500;
+    border: 1px solid transparent;
+    transition: background .25s ease, color .25s ease, border-color .25s ease;
+  }
+  .btn-primary { background: var(--fg); color: var(--bg); }
+  .btn-primary:hover { background: var(--accent); }
+  .btn-secondary { color: var(--fg); border-color: var(--fg); }
+  .btn-secondary:hover { background: var(--fg); color: var(--bg); }
+
+  /* References */
+  .refs { padding: clamp(56px, 6vw, 80px) 0; border-bottom: 1px solid var(--rule); }
+  .refs h3 { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 24px; font-weight: 500; }
+  .refs ul {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; gap: 14px;
+    max-width: 70ch;
+  }
+  .refs li {
+    font-size: 0.95rem; line-height: 1.5; color: var(--fg-soft);
+    padding-left: 22px;
+    position: relative;
+  }
+  .refs li::before {
+    content: ""; position: absolute; left: 0; top: 0.7em;
+    width: 12px; height: 1px; background: var(--accent);
+  }
+  .refs li strong { color: var(--fg); font-weight: 500; }
+  .refs li em { font-style: italic; color: var(--fg); }
+
+  footer { padding: 36px 0; }
+  .foot-inner { display: flex; justify-content: space-between; align-items: center; gap: 24px; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); flex-wrap: wrap; }
+  .foot-inner a:hover { color: var(--accent); }
+
+  /* Reveal animation */
+  .reveal { opacity: 0; transform: translateY(14px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+    .reveal { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="container topbar-inner">
+    <a class="brand" href="Ethicos AI.html" aria-label="Ethicos AI home">
+      <span class="brand-mark" aria-hidden="true">Æ</span>
+      <span class="brand-name">Ethicos <em>AI</em></span>
+    </a>
+    <nav class="top-jump">
+      <a href="Ethicos AI.html#services">Services</a>
+      <a href="Ethicos AI.html#method">Method</a>
+      <a href="Ethicos AI.html#founder">Founder</a>
+      <a href="Philosophy.html" style="color: var(--fg);">Philosophy</a>
+      <a href="Ethicos AI.html#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<!-- COVER -->
+<section class="cover">
+  <div class="container">
+    <div class="mono eyebrow"><span class="dot"></span><span>Philosophy · The ideas behind the work</span></div>
+    <h1 class="reveal">Practical wisdom for an age of <em>artificial intelligence</em>.</h1>
+    <p class="lead reveal">
+      Ethicos AI is grounded in a simple claim: better AI requires better judgement. Not faster models. Not broader adoption. Not longer policy documents. The work of responsible AI is the work of practical wisdom, applied to systems that increasingly act in the world.
+    </p>
+
+    <dl class="cover-meta reveal">
+      <div><dt>Reading time</dt><dd>About ten minutes</dd></div>
+      <div><dt>Audience</dt><dd>Executives, researchers, policy and AI teams</dd></div>
+      <div><dt>Companion</dt><dd><a href="Ethicos AI.html" style="color: var(--accent); text-decoration: underline; text-underline-offset: 3px;">ethicos.co.uk →</a></dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- INTRO -->
+<section class="intro">
+  <div class="container">
+    <div class="intro-grid">
+      <p class="reveal">
+        The serious question is not whether AI can be made to follow rules. It is what happens to organisations, decisions, and people when AI begins to <em>act</em> in the world &mdash; and how we make those actions ones we can stand behind.
+      </p>
+      <div class="intro-side reveal">
+        <p>This page sets out the ideas that shape how Ethicos approaches AI strategy, ethics, and governance. The work draws on published research in moral reasoning, decision-making, interpretability, and AI safety. It is written for non-specialists.</p>
+        <ol>
+          <li><span class="num">01</span><a href="#interpretation">Rules don't interpret themselves</a></li>
+          <li><span class="num">02</span><a href="#exposure">Exposure matters</a></li>
+          <li><span class="num">03</span><a href="#values">Values carry meaning</a></li>
+          <li><span class="num">04</span><a href="#operational">From principle to operation</a></li>
+          <li><span class="num">05</span><a href="#three-rs">The Three Rs</a></li>
+          <li><span class="num">06</span><a href="#mars">From values to decisions</a></li>
+          <li><span class="num">07</span><a href="#phronesis">Practical wisdom in institutions</a></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- §1 — The Interpretation Problem -->
+<section class="idea" id="interpretation">
+  <div class="container">
+    <div class="idea-head reveal">
+      <div>
+        <span class="idea-num">§ 01 / The interpretation problem</span>
+        <div class="idea-meta">Rules · goals · principles</div>
+      </div>
+      <h2>Rules do not <em>interpret</em> themselves.</h2>
+    </div>
+
+    <div class="idea-body">
+      <div class="idea-prose reveal">
+        <p>
+          Every rule, goal, or principle has to be applied to a case that was not in the rulebook. This is true of laws, contracts, ethical codes, internal policies, and the instructions we give to AI systems. The hard work is rarely in the writing. It is in the moment a rule meets the world and someone has to decide what it means here, in this particular situation, for these particular people.
+        </p>
+        <p>
+          The same is true of the goals we give to AI. A system can satisfy a goal in a way that is technically correct and substantively wrong: optimising the letter of an instruction while breaking the value it was meant to protect. Anyone who has watched a model learn to game a metric, or a policy be applied to a case nothing like the one it was written for, has met this in person.
+        </p>
+
+        <div class="pull">
+          <p>"AI governance cannot rely on instructions alone. The hard question is how rules, goals, and values are <em>interpreted</em> when systems meet the world."</p>
+          <span class="attr">The interpretation problem · Badea &amp; Artus, SGAI 2022</span>
+        </div>
+
+        <p>
+          This is the interpretation problem. It is not a flaw to be patched out of AI. It is a property of any system that takes rules and applies them. What changes between a thoughtful human reader, a junior employee, and a deep neural network is not whether interpretation happens. It is who can interpret well, how their interpretations can be checked, and what we do when those interpretations diverge.
+        </p>
+      </div>
+
+      <aside class="idea-margin reveal">
+        <span class="label">In practice</span>
+        <h4>What this changes</h4>
+        <p>Responsible AI is not just about writing better rules. It is about designing systems, organisations, and review processes that can interpret, challenge, and correct how rules and values are applied.</p>
+        <div class="commercial">
+          <span class="label">Commercial translation</span>
+          <p>An internal AI policy that cannot be applied to a real edge case is not a policy. Ethicos helps organisations build review processes around the moments of interpretation, not just the principles they are supposed to express.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- §2 — Exposure -->
+<section class="idea" id="exposure">
+  <div class="container">
+    <div class="idea-head reveal">
+      <div>
+        <span class="idea-num">§ 02 / The law of interpretative exposure</span>
+        <div class="idea-meta">Risk · context · causal reach</div>
+      </div>
+      <h2>The more an AI system can <em>affect</em> the world, the more it matters how it is governed.</h2>
+    </div>
+
+    <div class="idea-body">
+      <div class="idea-prose reveal">
+        <p>
+          Not every AI system carries the same risk. A chatbot drafting internal text, a clinical decision-support tool, a credit model, and an autonomous control system stand in different relationships to the world. Each interprets its inputs in its own way, and each delivers its interpretation back with a different amount of causal force.
+        </p>
+        <p>
+          A useful way to put this: <em>risk scales with interpretative exposure</em>. The more causally connected a system is to the world, the larger the consequence of any misinterpretation or value failure. This proposition has been articulated in published work as the Artus &ndash; Badea Law, sometimes called the Law of Interpretative Exposure. It does not say AI is uniquely dangerous. It says that AI, like every other rule-applying system, carries risk in proportion to how far its interpretations travel.
+        </p>
+
+        <div class="pull">
+          <p>"The more an AI system can affect the world, the more carefully its assumptions, values, and decision pathways need to be <em>governed</em>."</p>
+          <span class="attr">The Artus &ndash; Badea Law · Law of Interpretative Exposure</span>
+        </div>
+
+        <p>
+          For institutions, this means governance should not be uniform. A general AI-use policy is not enough for a clinical product, and a clinical-grade review is overkill for a knowledge-base summariser. The work is to match the depth of oversight to the depth of exposure.
+        </p>
+      </div>
+
+      <aside class="idea-margin reveal">
+        <span class="label">In practice</span>
+        <h4>Right-sized governance</h4>
+        <p>Ethicos engagements typically start by mapping a portfolio of AI systems against their interpretative exposure: causal reach, sensitivity of context, reversibility of action. Governance and review then scale to that map, not to a single corporate template.</p>
+        <div class="commercial">
+          <span class="label">Where this lands</span>
+          <p>A board AI policy that scales review to risk is taken more seriously than one that treats every system the same. The exposure lens is also a useful framing for regulators and funders.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- §3 — Values carry meaning -->
+<section class="idea" id="values">
+  <div class="container">
+    <div class="idea-head reveal">
+      <div>
+        <span class="idea-num">§ 03 / Values as vehicles of meaning</span>
+        <div class="idea-meta">Value-based AI · explicit moral reasoning</div>
+      </div>
+      <h2>Values are not decoration. They are the <em>bridge</em> between formal rules and human meaning.</h2>
+    </div>
+
+    <div class="idea-body">
+      <div class="idea-prose reveal">
+        <p>
+          A response to the interpretation problem is to be explicit about the values a system is meant to serve, not only the rules it is meant to follow. Rules describe what to do. Values describe why those rules exist, and which way to lean when the rules run out or pull against each other.
+        </p>
+        <p>
+          This is the position behind value-based AI: that intelligent systems should make their moral reasoning explicit rather than have it folded silently into weights, parameters, or default behaviours. Making values explicit does not solve the interpretation problem. It changes who is doing the interpreting, and exposes that work to review.
+        </p>
+
+        <div class="pull">
+          <p>"Value-based AI asks a harder question: not only what did the system decide, but what did that decision <em>mean</em> for the humans affected by it?"</p>
+        </div>
+
+        <p>
+          Organisations should not only ask whether an AI system has followed a policy. They should ask what values that system is in fact serving, how those values are represented, what trade-offs are being made on their behalf, and whether humans can inspect and contest the result.
+        </p>
+      </div>
+
+      <aside class="idea-margin reveal">
+        <span class="label">In practice</span>
+        <h4>Beyond rule-following</h4>
+        <p>Audits and ethics reviews can stop at: did the system follow the policy? Better ones ask: which values did its decisions serve, and which did they trade away?</p>
+        <div class="commercial">
+          <span class="label">Commercial translation</span>
+          <p>Many AI products optimise for metrics that quietly stand in for values their teams have not made explicit. Ethicos helps surface what the metric is actually serving and whether the organisation can stand behind it.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- §4 — Operational values -->
+<section class="idea" id="operational">
+  <div class="container">
+    <div class="idea-head reveal">
+      <div>
+        <span class="idea-num">§ 04 / Operational values</span>
+        <div class="idea-meta">From principle to commitment</div>
+      </div>
+      <h2>A value becomes useful when it can be <em>connected</em> to people, actions, and consequences.</h2>
+    </div>
+
+    <div class="idea-body">
+      <div class="idea-prose reveal">
+        <p>
+          "Fairness," "safety," and "transparency" are real values, but they are not yet useful claims. They become useful when an organisation can answer four questions about them: <em>fair to whom, against what, observable how, and contestable by whom</em>. Until those questions are answered, the principle is decoration.
+        </p>
+        <p>
+          The published research has a more formal name for this idea: <em>transactional</em> or <em>anthropo-relational</em> values &ndash; values that can be tied to human effects, relationships, and measurable change. In client work we use the plainer label: <em>operational values</em>. The phrase keeps the idea close to the work it is meant to do.
+        </p>
+
+        <div class="pull">
+          <p>"Ethicos treats values as <em>operational</em> commitments: claims about what should matter, to whom, and in which decisions."</p>
+        </div>
+
+        <p>
+          An operational value carries five things with it: a constituency (who it is for), a target (what it changes), an indicator (how it can be seen), a review point (who checks it), and a remedy (what happens when it fails). A principle that lacks any of these is a slogan with good intentions.
+        </p>
+      </div>
+
+      <aside class="idea-margin reveal">
+        <span class="label">In practice</span>
+        <h4>The five-part test</h4>
+        <p>For every value an AI system is meant to express, Ethicos engagements look for: constituency, target, indicator, review point, remedy. The gaps usually map cleanly to the work that still needs doing.</p>
+        <div class="commercial">
+          <span class="label">Where this lands</span>
+          <p>Operational values give a board, a funder, or a regulator something they can actually examine. They make a responsible-AI claim auditable without making it bureaucratic.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- §5 — The Three Rs -->
+<section class="idea" id="three-rs">
+  <div class="container">
+    <div class="idea-head reveal">
+      <div>
+        <span class="idea-num">§ 05 / The Three Rs</span>
+        <div class="idea-meta">A lens for AI &amp; institutional decisions</div>
+      </div>
+      <h2>Before asking whether a decision was right, ask what was <em>noticed</em>, how it was represented, and how it was reasoned through.</h2>
+    </div>
+
+    <div class="idea-body">
+      <div class="idea-prose reveal">
+        <p>
+          Most analyses of AI decisions begin too late. They start with the output and ask whether it was correct. A more useful lens, drawn from work on meta-decision-making, asks three questions earlier in the chain: what did the system consider relevant, how did it represent that information, and how did it reason from those representations to a conclusion?
+        </p>
+
+        <div class="three-rs">
+          <div class="rs">
+            <span class="letter">R</span>
+            <div class="name">Relevance</div>
+            <p class="q">What matters in this situation?</p>
+            <p class="desc">What did the system attend to, and what did it ignore? Many AI failures are failures of relevance long before they are failures of reasoning.</p>
+          </div>
+          <div class="rs">
+            <span class="letter">R</span>
+            <div class="name">Representation</div>
+            <p class="q">How is what matters represented?</p>
+            <p class="desc">A datum is never neutral. A diagnosis as a label, a feature, a probability, or a sentence is four different things to an AI system.</p>
+          </div>
+          <div class="rs">
+            <span class="letter">R</span>
+            <div class="name">Reasoning</div>
+            <p class="q">How are representations used to reach a decision?</p>
+            <p class="desc">Two systems with the same inputs can reach opposite conclusions because they reason differently. Interpretability lives here.</p>
+          </div>
+        </div>
+
+        <p style="margin-top: 28px;">
+          The Three Rs are not a methodology. They are a place to look. Most serious problems in AI decision-making sit in one of these three spots, and most useful interventions land there too.
+        </p>
+      </div>
+
+      <aside class="idea-margin reveal">
+        <span class="label">In practice</span>
+        <h4>A design and audit lens</h4>
+        <p>The Three Rs work as a structuring device for product reviews, audits, and governance discussions. They help teams articulate what they are actually delegating to a model, and where the room for disagreement lies.</p>
+        <div class="commercial">
+          <span class="label">Where this lands</span>
+          <p>Used early, they reframe the AI conversation away from "is the model good?" toward "what is the model being asked to do, with what inputs, and reasoning how?" Questions every stakeholder can hold an opinion on.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- §6 — MARS -->
+<section class="idea" id="mars">
+  <div class="container">
+    <div class="idea-head reveal">
+      <div>
+        <span class="idea-num">§ 06 / From values to decisions</span>
+        <div class="idea-meta">Explicit moral reasoning · MARS</div>
+      </div>
+      <h2>Values matter only when they <em>change</em> decisions.</h2>
+    </div>
+
+    <div class="idea-body">
+      <div class="idea-prose reveal">
+        <p>
+          A value that does not survive contact with a hard case is, for practical purposes, not a value the organisation holds. The same is true of the values an AI system is meant to embody. They need to be visible in the decisions the system makes, not only in the documents that describe it.
+        </p>
+        <p>
+          MARS &ndash; the Multi-valued Action Reasoning System &ndash; is a research framework for AI systems that deliberate over moral rules explicitly rather than absorbing them implicitly into model behaviour. It is not the answer to every AI ethics question. It is one demonstration that values, actions, impacts, and moral paradigms can be modelled as first-class objects an AI system reasons over, and a human can inspect.
+        </p>
+
+        <div class="pull">
+          <p>"Values matter only when they change decisions. Ethicos helps organisations move from <em>stated</em> principles to decision structures that can be used, tested, and improved."</p>
+          <span class="attr">After Badea · Multi-valued Action Reasoning System, SGAI 2022</span>
+        </div>
+
+        <p>
+          For clients, the lesson from MARS is not "adopt a logic-based AI". It is that explicit moral reasoning is possible, and that organisations should expect the AI systems they deploy in high-stakes contexts to be able to show their reasoning, not just their answer.
+        </p>
+      </div>
+
+      <aside class="idea-margin reveal">
+        <span class="label">In practice</span>
+        <h4>Explicit, inspectable, contestable</h4>
+        <p>Engagements that draw on MARS-style thinking typically focus on three properties: making the system's value commitments explicit, making its reasoning inspectable, and giving humans a way to contest the result.</p>
+        <div class="commercial">
+          <span class="label">Where this lands</span>
+          <p>Particularly useful for clinical, regulatory, and safety-critical contexts, where "the model said so" is not a defensible answer.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- §7 — Phronesis -->
+<section class="idea" id="phronesis">
+  <div class="container">
+    <div class="idea-head reveal">
+      <div>
+        <span class="idea-num">§ 07 / Practical wisdom in institutions</span>
+        <div class="idea-meta">Phronēsis · the work itself</div>
+      </div>
+      <h2>Practical wisdom is the <em>condition</em> under which most AI decisions are actually made.</h2>
+    </div>
+
+    <div class="idea-body">
+      <div class="idea-prose reveal">
+        <p>
+          The Greek word for this is <em>phronēsis</em>: practical wisdom, the ability to act well when principles, evidence, incentives, institutions, and human consequences are tangled together. It is the form of judgement Aristotle thought most relevant to ethics &ndash; not the deduction of right action from a first principle, but the disciplined exercise of judgement in conditions that are rarely clean.
+        </p>
+        <p>
+          That description fits almost every serious AI decision an organisation will make in the next decade. Should we deploy this model? What is the threshold for human review? Who owns the failure modes? When does an improvement to accuracy justify a reduction in interpretability? These are not problems that yield to a checklist. They are problems that yield to careful reasoning, applied with judgement, by people who understand both the system and the institution it lives in.
+        </p>
+
+        <div class="pull">
+          <p>"Responsible AI is not solved by slogans, checklists, or abstract principles alone. It asks for clear reasoning, <em>institutional judgement</em>, and design choices that hold up under pressure."</p>
+        </div>
+
+        <p>
+          That is what Ethicos AI exists to support. Not the production of more principles. The application of practical wisdom &mdash; <em>phronēsis</em> &mdash; to the AI decisions that organisations are actually making, with the technical, philosophical, and institutional depth those decisions deserve.
+        </p>
+      </div>
+
+      <aside class="idea-margin reveal">
+        <span class="label">In practice</span>
+        <h4>The work itself</h4>
+        <p>Ethicos engagements are designed to leave clients better at this kind of judgement: clearer about what is at stake, more articulate about their values, more disciplined about how decisions get made and reviewed.</p>
+        <div class="commercial">
+          <span class="label">Where this lands</span>
+          <p>The best engagements end with a team that no longer needs an outside ethicist for every decision &mdash; they have built the practice in-house. That is the right success condition.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-sec">
+  <div class="container">
+    <h2 class="reveal">If your organisation is facing a difficult AI decision, we can help you <em>reason it through</em>.</h2>
+    <p class="reveal">Ethicos works with boards, AI teams, healthcare and research consortia, public-sector groups, and universities on the questions that do not yield to a checklist.</p>
+    <div class="cta-btns reveal">
+      <a class="btn btn-primary" href="Ethicos AI.html#contact">Start a conversation <span aria-hidden="true">→</span></a>
+      <a class="btn btn-secondary" href="Ethicos AI.html#services">See how we work <span aria-hidden="true">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- REFERENCES -->
+<section class="refs">
+  <div class="container">
+    <h3>Selected sources this page draws on</h3>
+    <ul>
+      <li><strong>Badea, C. &amp; Artus, G.</strong> <em>Morality, machines and the interpretation problem: a value-based, Wittgensteinian approach to building moral agents.</em> Artificial Intelligence XXXIX (SGAI 2022), Springer LNAI.</li>
+      <li><strong>Badea, C.</strong> <em>Have a break from making decisions, have a MARS: the Multi-valued Action Reasoning System.</em> Artificial Intelligence XXXIX (SGAI 2022), Springer LNAI.</li>
+      <li><strong>Badea, C. &amp; Gilpin, L.</strong> <em>Establishing meta-decision-making for AI: an ontology of relevance, representation and reasoning.</em> AAAI Fall Symposium, 2021.</li>
+      <li><strong>Vijayaraghavan, A. &amp; Badea, C.</strong> <em>Minimum levels of interpretability for artificial moral agents.</em> AI and Ethics, 2024.</li>
+      <li><strong>Bolton, W., Badea, C., Georgiou, P., Holmes, A., Rawson, T.</strong> <em>Developing moral AI to support antimicrobial decision-making.</em> Nature Machine Intelligence 4, 912–915 (2022).</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <div class="container foot-inner">
+    <span>© 2026 Ethicos AI LTD</span>
+    <span><a href="Ethicos AI.html">Home</a> · <a href="Brand Directions.html">Brand directions</a> · <a href="Logo Concepts.html">Logo concepts</a> · <a href="mailto:cos@ethicos.co.uk">cos@ethicos.co.uk</a></span>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var els = document.querySelectorAll(".reveal");
+    if (!("IntersectionObserver" in window)) {
+      els.forEach(function (el) { el.classList.add("in"); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          e.target.classList.add("in");
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: "0px 0px -8% 0px" });
+    els.forEach(function (el) { io.observe(el); });
+  })();
+</script>
+
+</body>
+</html>
