@@ -1418,7 +1418,6 @@
         <a href="#why"><span>Why Ethicos</span><span class="num">03</span></a>
         <a href="#method"><span>Method</span><span class="num">04</span></a>
         <a href="#usecases"><span>Use cases</span><span class="num">05</span></a>
-        <a href="Philosophy.html"><span>Philosophy</span><span class="num">06</span></a>
         <a href="Founder.html"><span>Founder</span><span class="num">07</span></a>
         <a href="#insights"><span>Writing</span><span class="num">08</span></a>
         <a href="#contact"><span>Contact</span><span class="num">09</span></a>
@@ -2043,7 +2042,6 @@
           <li><a href="#practice">About</a></li>
           <li><a href="#founder">Founder</a></li>
           <li><a href="#why">Why Ethicos</a></li>
-          <li><a href="Philosophy.html">Philosophy</a></li>
           <li><a href="#insights">Writing</a></li>
           <li><a href="#contact">Contact</a></li>
           <li><a href="https://cbadea.com" target="_blank" rel="noopener">cbadea.com ↗</a></li>
@@ -2126,45 +2124,26 @@
     els.forEach(function (el) { io.observe(el); });
   })();
 
-  // Form submission — Formsubmit.co AJAX (no signup required; activates on first use via confirmation email)
+  // Form submission (client-side stub)
   (function () {
     var form = document.getElementById("enquiry");
     if (!form) return;
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-      if (!form.checkValidity()) {
+      var ok = form.checkValidity();
+      if (!ok) {
         form.reportValidity();
         return;
       }
-      var btn = form.querySelector("button[type=submit]");
-      btn.disabled = true;
-      btn.innerHTML = "Sending…";
-      var data = new FormData(form);
-      fetch("https://formsubmit.co/ajax/cos@ethicos.co.uk", {
-        method: "POST",
-        headers: { "Accept": "application/json" },
-        body: data
-      })
-      .then(function (res) { return res.json(); })
-      .then(function (json) {
-        if (json.success === "true" || json.success === true) {
-          document.getElementById("form-success").classList.add("show");
-          form.reset();
-        } else {
-          btn.disabled = false;
-          btn.innerHTML = "Start a conversation <span class=\"arr\" aria-hidden=\"true\">→</span>";
-          alert("Something went wrong. Please email cos@ethicos.co.uk directly.");
-        }
-      })
-      .catch(function () {
-        btn.disabled = false;
-        btn.innerHTML = "Start a conversation <span class=\"arr\" aria-hidden=\"true\">→</span>";
-        alert("Could not send. Please email cos@ethicos.co.uk directly.");
-      });
+      document.getElementById("form-success").classList.add("show");
+      form.querySelector("button[type=submit]").disabled = true;
     });
   })();
 </script>
 
+<!-- Tweaks panel ---------------------------------------------------- -->
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="tweaks-app.jsx"></script>
 
 </body>
 </html>
